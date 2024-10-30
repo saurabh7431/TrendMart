@@ -1,7 +1,5 @@
 const mongoose=require("mongoose")
 
-mongoose.connect(`mongodb://localhost:27017/ecommarce`)
-
 const userSchema=mongoose.Schema({
     name:{
         type:String,
@@ -10,11 +8,10 @@ const userSchema=mongoose.Schema({
     },
     email:String,
     password:String,
-    cart:{
-        type:Array,
-        default:[],
-    },
-    isAdmin:Boolean,
+    cart:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"products"
+    }],
     order:{
         type:Array,
         default:[],

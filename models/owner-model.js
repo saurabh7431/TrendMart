@@ -14,7 +14,15 @@ const ownerSchema=mongoose.Schema({
     },
     contact:Number,
     picture:String,
-    gstin:String
+    gstin:String,
+    isAdmin: {
+        type: Boolean,
+        default: false  // By default, the owner is not an admin
+    },
+    products:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"products"
+    }]
 })
 
 module.exports= mongoose.model("owner", ownerSchema)
