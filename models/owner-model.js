@@ -6,23 +6,23 @@ const ownerSchema=mongoose.Schema({
         minLength:3,
         trim:true
     },
+    products:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"products"
+    }],
     email:String,
     password:String,
-    products:{
-        type:Array,
-        default:[],
-    },
     contact:Number,
-    picture:String,
+    profile:{
+        type:Buffer,
+        default:null
+    },
     gstin:String,
     isAdmin: {
         type: Boolean,
         default: false  // By default, the owner is not an admin
     },
-    products:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"products"
-    }]
+   
 })
 
 module.exports= mongoose.model("owner", ownerSchema)

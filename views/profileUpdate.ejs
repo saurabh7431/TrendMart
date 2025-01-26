@@ -1,0 +1,41 @@
+<%- include('./partials/adminheader')%>
+    
+<% if(success.length> 0){ %>
+    <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
+        <span class="inline-block mt-1 mb-1 text-white">
+            <%= success %>
+        </span>
+    </div>
+    <% } %>
+
+        <div class="min-h-screen flex flex-col">
+            <div class="container px-10 py-20 flex flex-grow">
+                <div class="w-[25%] flex h-screen flex-col items-start">
+                    <div class="flex flex-col">
+                        <a class="block w-fit mb-2" href="">All Products</a>
+                        <a class="block w-fit mb-2" href="/admin">Back to Admin Page</a>
+                    </div>
+                </div>
+                
+                <main class="w-3/4  p-8 shadow ml-4">
+                    <h2 class="text-xl text-center font-bold mb-4">Change Profile Photo</h2>
+                    <div class=" rounded-full w-40 h-40 items-center relative left-80 object-cover" ">
+                        <img class="w-full h-full border-orange-200 border-2 border-solid rounded-full " src="data:image/jpeg;base64,<%= owner.profile.toString('base64') %>" alt="">
+                    </div>
+                    <div class="flex justify-center items-center flex-col">
+                    
+                    <form autocomplete="off" action="/owner/updateProfile/<%= profileImage._id%>" method="post" enctype="multipart/form-data">
+                        <div class="mb-6">
+                            <div class="flex justify-center">
+                                <label for="fileUpload"  class="block text-center text-sm font-medium text-white w-20 bg-green-600 rounded cursor-pointer hover:bg-green-500" >Pofile Image</label>
+                                <input name="image" type="file" id="fileUpload" accept="image/*" class="py-2 px-4 rounded hidden" value="<%= profileImage.profile%>" >
+                            </div>
+                            
+                        </div>
+                        <input class="px-5 py-2 rounded mt-3 bg-blue-500 text-white" type="submit"
+                            value="Upload Profile Photo">
+                    </form>
+                </div>
+                </main>
+            </div>
+        </div>

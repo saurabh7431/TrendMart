@@ -1,0 +1,73 @@
+<%- include('./partials/header')%>
+   
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto mt-16 p-4 bg-white shadow-lg rounded-lg">
+        <!-- Order Summary -->
+        <% let totalMRP = product.price * quantity; %>
+        <section class="order-summary border-b pb-4 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+            <ul class="space-y-4">
+                <li class="flex justify-between items-center">
+                    <div>
+                        <p class="font-medium">Product Name: <%= product.name%></p>
+                        <p class="text-sm text-gray-500">Quantity: <%=quantity%></p>
+                    </div>
+                    <p class="font-semibold text-gray-700">₹<%= totalMRP +20%></p>
+                </li>
+               
+            </ul>
+            <hr class="my-4">
+            <div class="flex justify-between font-bold text-lg">
+                <span>Total:</span>
+                <span>₹<%= totalMRP+ 20%></span>
+            </div>
+        </section>
+
+        <!-- Payment Form -->
+        <section class="payment-form">
+            <form action="/user/order/<%=orders._id%>"  class="space-y-6">
+                <h2 class="text-xl font-semibold mb-4">Payment Details</h2>
+
+                <!-- Name on Card -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name on Card</label>
+                    <input type="text" id="name" name="cardName" placeholder="John Doe" required
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                </div>
+
+                <!-- Card Number -->
+                <div>
+                    <label for="card-number" class="block text-sm font-medium text-gray-700">Card Number</label>
+                    <input type="text" id="card-number" name="cardNumber" placeholder="1234 5678 9012 3456" required
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                </div>
+
+                <!-- Expiry Date and CVV -->
+                <div class="flex space-x-4">
+                    <div class="flex-1">
+                        <label for="expiry" class="block text-sm font-medium text-gray-700">Expiry Date</label>
+                        <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                    </div>
+                    <div class="flex-1">
+                        <label for="cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                        <input type="text" id="cvv" name="cvv" placeholder="123" required
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2">
+                    </div>
+                </div>
+
+                
+                <!-- Pay Now Button -->
+                <button type="submit"
+                    class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700">
+                    Pay ₹ <%= totalMRP +20%>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-sm text-gray-500">
+        <p>&copy; 2024 Your E-commerce Store</p>
+    </footer>
+

@@ -1,61 +1,95 @@
 <%- include('./partials/header') %>
+<% if(success.length > 0) { %>
+    <div class="absolute z-10 top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
+        <span class="inline-block mt-1 mb-1 text-white">
+            <%= success %>
+        </span>
+    </div>
+<% } %>
+
 <div class="w-full h-full flex items-start flex-col px-20 py-20 gap-10">
     <% if (user.cart.length > 0) { %>
-        <% let totalMRP = 0; let totalDiscount = 0; %>
-        
-        <!-- Loop through each product in the cart -->
-        <% user.cart.forEach(function(product) { %>
-            <div class="flex gap-2 w-full">
-            <div class="w-[30%] bg-blue-300 rounded-md overflow-hidden">
-                <div class="w-full h-80 flex justify-center items-center bg-[<%= product.bgcolor %>]">
-                    <img class="h-[12rem]" src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="Product Image">
-                </div>
-                <div class="w-full bg-[<%= product.panelcolor %>] flex justify-between px-5 py-4">
-                    <h3 class="text-2xl"><%= product.name %></h3>
-                    <div class="flex items-center gap-2">
-                        <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
-                        <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
-                        <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
-                    </div>
-                </div>
-                <div class="flex items-center justify-between px-5 py-3">
-                    <h4 class="text-lg">Net Total</h4>
-                    <h2 class="text-lg">₹ <%= product.price %></h2>
-                </div>
-            </div>
+        <% let grandTotalMRP = 0; let grandTotalDiscount = 0; %>
 
-            <!-- <% totalMRP += product.price %> -->
-            <% totalDiscount += product.discount ? product.discount : 0; %>
-            
-            <!-- Price Breakdown Section -->
-            <div class="w-[70%] ">
-                <h3 class="text-xl">Price Breakdown</h3>
-                <div class="px-10 mt-5">
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Total MRP</h4>
-                        <h4>₹ <%= product.price %></h4>
+        <!-- Loop through each product in the cart -->
+        <% user.cart.forEach(function(cartItem, index) { %>
+            <% if (cartItem.product) { %> <!-- Check if product exists -->
+            <div class="flex gap-2 w-full">
+                <div class="w-[30%] bg-blue-300 rounded-md overflow-hidden">
+                    <div class="w-full h-80 flex justify-center items-center bg-[<%= cartItem.product.bgcolor %>]">
+                        <img class="h-[12rem]" src="data:image/jpeg;base64,<%= cartItem.product.image.toString('base64') %>" alt="Product Image">
                     </div>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Discount on MRP</h4>
-                        <h4>₹ <%= totalDiscount %></h4>
+                    <div class="w-full bg-[<%= cartItem.product.panelcolor %>] flex justify-between px-5 py-4">
+                        <h3 class="text-2xl"><%= cartItem.product.name %></h3>
+                        <div class="flex items-center gap-2">
+                            <!-- Conditional Display: Show Delete Button if Quantity is 1, otherwise Show Decrease Button -->
+                            <% if (cartItem.quantity === 1) { %>
+                                <!-- Delete Button -->
+                                <a href="/user/item/delete/<%= index %>" class="btn">
+                                    <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-delete-bin-line"></i>
+                                </a>
+                            <% } else { %>
+                                <!-- Decrease Quantity Button -->
+                                <a href="/user/item/decrease/<%= cartItem.product._id %>" class="btn">
+                                    <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
+                                </a>
+                            <% } %>
+                            <div class="px-2 py-1 rounded-md bg-white text-black"><%= cartItem.quantity %></div>
+                            <!-- Increase Quantity Button -->
+                            <a href="/user/item/increase/<%= cartItem.product._id %>" class="btn">
+                                <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
+                            </a>
+                        </div>
                     </div>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Platform Fee</h4>
-                        <h4>₹ 20</h4>
-                    </div>
-                    <div class="flex mt-2">
-                        <h4 class="w-1/3">Shipping Fee</h4>
-                        <h4>FREE</h4>
+                    <div class="flex items-center justify-between px-5 py-3">
+                        <h4 class="text-lg">Net Total</h4>
+                        <% let totalMRP = cartItem.product.price * cartItem.quantity; %>
+                        <h2 class="text-lg">₹ <%= cartItem.product.price %></h2>
                     </div>
                 </div>
-                <div class="w-full h-[1px] bg-black mt-10"></div>
-                <div class="flex mt-5">
-                    <h3 class="w-1/3 text-xl">Total Amount</h3>
-                    <h3 class="font-semibold text-xl text-green-600">₹ <%= product.price - totalDiscount + 20 %></h3>
+
+                <% grandTotalMRP += totalMRP; %>
+                <% grandTotalDiscount += cartItem.product.discount ? cartItem.product.discount * cartItem.quantity : 0; %>
+
+                <!-- Price Breakdown Section -->
+                <div class="w-[70%]">
+                    <h3 class="text-xl">Price Breakdown</h3>
+                    <div class="px-10 mt-5">
+                        <div class="flex mt-2">
+                            <h4 class="w-1/3">Total MRP</h4>
+                            <h4>₹ <%= totalMRP %></h4>
+                        </div>
+                        <div class="flex mt-2">
+                            <h4 class="w-1/3">Discount on MRP</h4>
+                            <h4>₹ <%= cartItem.product.discount * cartItem.quantity %></h4>
+                        </div>
+                        <div class="flex mt-2">
+                            <h4 class="w-1/3">Platform Fee</h4>
+                            <h4>₹ 20</h4>
+                        </div>
+                        <div class="flex mt-2">
+                            <h4 class="w-1/3">Shipping Fee</h4>
+                            <h4>FREE</h4>
+                        </div>
+                    </div>
+                    <div class="w-full h-[1px] bg-black mt-10"></div>
+                    <div class="flex  mt-5">
+                        <h3 class="w-1/3 text-xl">Total Amount</h3>
+                        <h3 class="font-semibold text-xl text-green-600">
+                            ₹ <%= totalMRP - (cartItem.product.discount * cartItem.quantity) + 20 %>
+                        </h3>
+                        <a href="/user/buy/<%=cartItem.product._id%>" class=" w-40 flex justify-end"><button class="bg-blue-500 text-white px-3 rounded">Buy Now</button></a>
+                    </div>
                 </div>
             </div>
+            <% } %> <!-- End product existence check -->
+        <% }); %>
+
+        <!-- Display Grand Total -->
+        <div class="mt-10">
+            <h2 class="text-2xl font-bold">Grand Total MRP: ₹ <%= grandTotalMRP %></h2>
+            <h2 class="text-2xl font-bold text-green-600">Grand Total Amount (after discounts): ₹ <%= grandTotalMRP - grandTotalDiscount + (20 * user.cart.length) %></h2>
         </div>
-            <% }); %>
 
     <% } else { %>
         <p>Your cart is empty.</p>

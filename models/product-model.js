@@ -9,6 +9,12 @@ const productSchema = mongoose.Schema({
         minLength: 3,
         trim: true
     },
+
+      // Reference to the owner of the product, which is an ObjectId type referring to the "owner" model
+      owner:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"owner"
+    },
     // The image of the product stored as a buffer (binary data)
     image: Buffer,
     
@@ -29,17 +35,6 @@ const productSchema = mongoose.Schema({
     // Text color associated with the product (string)
     textcolor: String,
     
-    // Reference to the owner of the product, which is an ObjectId type referring to the "owner" model
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "owner"
-    },
-    
-    // The quantity of the product, with a default value of 1 if not specified
-    quantity: {
-        type: Number,
-        default: 1
-    }
 });
 
 // Export the product model, which will use the "products" collection in the database and the defined schema

@@ -1,9 +1,13 @@
 const bcrypt=require("bcrypt");
+const fs = require('fs');
+const path = require('path');
 const jwt=require('jsonwebtoken')
 const ownerModel=require('../models/owner-model')
 const {generateAdminToken}=require("../utils/generateAdminToken");
 const userModel = require("../models/user-model");
 
+
+const defaultImagePath = path.join(__dirname, '../public/images/profile.jpeg');
 // Admin Login and create
 module.exports.registerOwner= async (req,res)=>{
     try {
@@ -11,10 +15,11 @@ module.exports.registerOwner= async (req,res)=>{
         let owner=await ownerModel.findOne({email:email})
         if(owner){ 
             req.flash("error", "You have already account you can login with your email or password");
-            return res.redirect('/owner')
+            return res.redirect('/owner/crateadmin')
         
         }
 
+        const defaultImageBuffer = fs.readFileSync(defaultImagePath);
         bcrypt.genSalt(12, (err, salt)=>{
             bcrypt.hash(password, salt, async (err, hash)=>{
                 if(err) return res.send(err.message);
@@ -23,11 +28,13 @@ module.exports.registerOwner= async (req,res)=>{
                         name,
                         email,
                         password:hash,
+                        profile: defaultImageBuffer,
                     });
                     
-                    let token= generateAdminToken(owner);
-                    res.cookie("token", token)
-                    req.flash("User created succesfully");
+                    // let token= generateAdminToken(owner);
+                    // res.cookie("token", token)
+                    res.redirect("/owner/crateadmin")
+                    req.flash("success","User created succesfully");
                 }
             });
         })
@@ -82,21 +89,21 @@ module.exports.loginOwner= async(req,res)=>{
     let owner=await ownerModel.findOne({email:email});
     if(!owner){
         req.flash("error","Email or Password Incorrect");
-        return res.redirect('/owner')
+        return res.redirect('/admin')
     }
 
         bcrypt.compare(password, owner.password, (err, result)=>{
            if(result){
             let token=generateAdminToken(owner);
            res.cookie("token", token);
-           res.redirect('/admin')
+           res.redirect('/owner/adminpage')
            }else{
             req.flash("error", "Email or Password Incorrect")
-            return res.redirect('/owner')
+            return res.redirect('/admin')
            }
         })
 }
 module.exports.ownerLogout=(req,res)=>{
     res.cookie("token", "")
-    res.redirect('/login-admin')
+    res.redirect('/admin')
 }

@@ -1,0 +1,83 @@
+<%- include('./partials/header') %>
+<div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md mt-16">
+    <!-- Login Section -->
+    <div class="border-b border-gray-300 pb-4">
+        <h3 class="text-lg font-semibold flex items-center justify-between">
+            1 LOGIN <span class="text-green-500 font-bold">✔</span>
+        </h3>
+        <p class="text-gray-700 mt-2">
+            <strong><%= user.name %> </strong>: <%= user.email %>
+        </p>
+        <button class="mt-2 text-blue-600 hover:underline">CHANGE</button>
+    </div>
+
+    <!-- Delivery Address Section -->
+    <div class="border-b border-gray-300 py-4">
+        <h3 class="text-lg font-semibold flex items-center justify-between">
+            2 DELIVERY ADDRESS <span class="text-green-500 font-bold">✔</span>
+        </h3>
+        <p class="text-gray-700 mt-2">
+            <strong><%= address.name %> </strong><%= address.phone %>, <%= address.pincode %>, <%= address.locality %>,
+            <%= address.address %>, <%= address.city %>,<%= address.state %>,<%= address.landmark %>,<%= address.alternatePhone %>,
+        </p>
+        <button class="mt-2 text-blue-600 hover:underline">CHANGE</button>
+    </div>
+
+    <!-- Order Summary Section -->
+    <div class="py-4">
+        <h3 class="text-lg font-semibold">3 ORDER SUMMARY</h3>
+        <div class="flex items-start gap-4 mt-4">
+            <img src="data:image/jpeg;base64,<%= productImage.toString('base64') %>" alt="Product Image" class="w-20 h-20 border rounded-md">
+            <div class="flex-1">
+                <h4 class="font-medium text-gray-800"><%= product.name %></h4>
+                <p class="text-sm text-gray-600">Seller: TrenMart</p>
+                <p class="text-sm text-gray-800 mt-2">
+                    ₹<%= product.price %> <span class="text-green-600 text-sm"><%= product.discount %>%</span> 1 coupon applied
+                </p>
+                <button class="mt-2 text-red-500 hover:underline">REMOVE</button>
+            </div>
+        </div>
+    </div>
+    <% let grandTotalMRP = 0; let grandTotalDiscount = 0; %>
+    <% let totalMRP = product.price * quantity; %>
+    <!-- Price Details -->
+    <div class="bg-gray-50 p-4 mt-6 rounded-lg shadow-sm">
+        <h4 class="font-semibold text-lg border-b pb-2 mb-4">PRICE DETAILS</h4>
+        <div class="flex justify-between text-gray-700 mb-2">
+            <span>Price (<%= quantity %> item)</span>
+            <span>₹<%= totalMRP %></span>
+        </div>
+        <div class="flex justify-between text-gray-700 mb-2">
+            <span>Delivery Charges</span>
+            <span class="text-green-600">FREE</span>
+        </div>
+        <div class="flex justify-between text-gray-700 mb-4">
+            <span>Platform Fee</span>
+            <span>₹ 20</span>
+        </div>
+        <div class="flex justify-between font-semibold text-lg border-t pt-2">
+            <span>Total Payable</span>
+            <span>₹ <%= totalMRP + 20 %></span>
+        </div>
+        <p class="text-sm text-green-600 mt-2">Your Total Savings on this order ₹456</p>
+    </div>
+
+    <!-- Footer -->
+    <form action="/user/payment" method="POST">
+        <footer class="mt-6 text-right">
+            <input type="hidden" name="userId" value="<%= user._id %>">
+            <input type="hidden" name="productId" value="<%= product._id %>">
+            <input type="hidden" name="quantity" value="<%= quantity %>">
+            <input type="hidden" name="totalMRP" value="<%= totalMRP %>">
+            <input type="hidden" name="merchantTransactionId" value="<%= merchantTransactionId %>">
+            <p class="text-gray-600 text-sm mb-4">
+                Order confirmation email will be sent to <%= user.email %>
+            </p>
+            <button type="submit"  class="px-6 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">
+                Pay ₹<%= totalMRP + 20 %>
+            </button>
+        </footer>
+    </form>
+</div>
+
+

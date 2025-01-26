@@ -1,27 +1,33 @@
-<%- include('./partials/adminheader') %>
 
-<% if(error.length>0){ %>
-    <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500">
-        <span class="inline-block mt-1 mb-1 text-white">
-            <%= error %>
-        </span>
-    </div>
-    <% } %>
 
-    
+<%- include('./partials/adminheader') %>    
 
 <div class="w-full h-screen flex items-start px-20 py-20">
     <div class="w-[25%] flex h-screen flex-col items-start">
         <div class="flex flex-col">
-            <a class="block w-fit mb-2" href="">All Products</a>
+            <a class="block w-fit mb-2" href="/owner/adminpage">All Products</a>
             <a class="block w-fit mb-2" href="/owner/createproduct">Create new product</a>
-            <a class="block w-fit mb-2" href="/owner/crateadmin">Create Admin</a>
+            <a class="block w-fit mb-2" href="/owner">Create Admin</a>
         </div>
     </div>
     <div class="w-[75%] flex flex-col gap-5 h-screen">
-        <a class="text-red-500" href="">Delete all</a>
+        <div class=" flex flex-col items-center justify-center">
+            <div class=" rounded-full w-20 h-20 relative -z-10  object-cover" ">
+                <img class="w-full h-full border-orange-200 border-2 border-solid rounded-full " src="data:image/jpeg;base64,<%= owner.profile.toString('base64') %>" alt="">
+                <a class="w-7 h-7 flex items-center justify-center rounded-full absolute top-16 right-6 " href="/owner/updateProfile/<%=owner._id %>">
+                    <i class="ri-pencil-line text-black"></i>
+                </a>
+            </div>
+            <h1 class="font-bold text-lg"> <%= owner.name%></h1>
+            <h4 class="font-sans">Now you can create post</h4>
+        </div>
+        
+            <% if (owner.products && owner.products.length > 1) { %>
+                <a class="text-red-500" href="">Delete all</a>
+            <% } %>
+            
         <div class="flex justify-start items-center flex-wrap gap-2">
-      <% products.forEach((product)=>{%>
+      <% owner.products.forEach((product)=>{%>
         <div class="flex items-start gap-5">
             <div class="w-60 bg-[<%= product.panelcolor%>] border-2 border-red-500 rounded-b-lg text-[<%= product.textcolor%>]">
                 <div class="w-full flex justify-center items-center h-52 bg-[<%= product.bgcolor%>]">
