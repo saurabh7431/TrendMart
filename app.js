@@ -52,7 +52,7 @@ app.use(bodyParser.json());
 app.use(
   expressSession({
     resave: false, // Set this to 'false' or 'true' as per your needs
-    saveUninitialized: false,
+    saveUninitialized: true,
     secret: process.env.EXPRESS_SESSION_SECRET, // Make sure you have this in your .env file
   })
 );
@@ -67,10 +67,11 @@ app.use("/product", productRouter);
 app.use('/cart' , cartRouter);
 
 
-const PORT = process.env.PORT || 3000;
+// app.listen(3000, () => {
+//   console.log("Server is running on http://localhost:3000");
+// });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ Server is running on port ${PORT}`);
 });
-
-
