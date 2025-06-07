@@ -15,7 +15,7 @@ module.exports= async (req,res,next)=>{
         next();
     } catch (error) {
         req.flash("error", "something went wrong.")
-        res.redirect("/")
+        res.redirect("/admin")
     }
 
 }

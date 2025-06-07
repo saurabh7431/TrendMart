@@ -34,17 +34,57 @@
                         <div>
                             <h3 class="text-lg font-semibold mb-2">Panel Details</h3>
                             <div class="grid grid-cols-2 gap-4">
-                                <input name="bgcolor" type="color" placeholder="Background Color"
-                                    class="border p-2 rounded w-full" value="<%=product.bgcolor %>">
-                                <input name="panelcolor" type="text" placeholder="Panel Color"
-                                    class="border p-2 rounded w-full" value="<%=product.panelcolor %>">
-                                <input name="textcolor" type="text" placeholder="Text Color"
-                                    class="border p-2 rounded w-full" value="<%=product.textcolor %>">
+                            <label>Background Color</label>
+                            <div class="flex gap-2 items-center">
+                                <input name="bgcolor" type="color" id="bgcolorPicker"
+                                    class="border p-2 rounded w-1/2" value="<%=product.bgcolor %>">
+                                <input type="text" id="bgcolorText" name="bgcolorText"
+                                    class="border p-2 rounded w-1/2" value="<%=product.bgcolor %>">
+                            </div>
+
+                            <label>Panel Color</label>
+                            <div class="flex gap-2 items-center">
+                                <input name="panelcolor" type="color" id="panelcolorPicker"
+                                    class="border p-2 rounded w-1/2" value="<%=product.panelcolor %>">
+                                <input type="text" id="panelcolorText" name="panelcolorText"
+                                    class="border p-2 rounded w-1/2" value="<%=product.panelcolor %>">
+                            </div>
+
+                            <label>Text Color</label>
+                            <div class="flex gap-2 items-center">
+                                <input name="textcolor" type="color" id="textcolorPicker"
+                                    class="border p-2 rounded w-1/2" value="<%=product.textcolor %>">
+                                <input type="text" id="textcolorText" name="textcolorText"
+                                    class="border p-2 rounded w-1/2" value="<%=product.textcolor %>">
                             </div>
                         </div>
+                        </div>
                         <input class="px-5 py-2 rounded mt-3 bg-blue-500 text-white" type="submit"
-                            value="Create New Product">
+                            value="Update Product">
                     </form>
                 </main>
             </div>
         </div>
+
+        <script>
+    function syncColorInputs(pickerId, textId) {
+        const picker = document.getElementById(pickerId);
+        const text = document.getElementById(textId);
+
+        // Picker to Text
+        picker.addEventListener('input', () => {
+            text.value = picker.value;
+        });
+
+        // Text to Picker
+        text.addEventListener('input', () => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(text.value)) {
+                picker.value = text.value;
+            }
+        });
+    }
+
+    syncColorInputs("bgcolorPicker", "bgcolorText");
+    syncColorInputs("panelcolorPicker", "panelcolorText");
+    syncColorInputs("textcolorPicker", "textcolorText");
+</script>

@@ -53,17 +53,12 @@ router.post('/update/:Id', upload.single('image'), async (req, res) => {
 
         
         req.flash('success', 'Product updated successfully');
-        res.redirect('/admin');
+        res.redirect('/owner/adminpage');
         
     } catch (error) {
-        
         console.error("Error updating product:", error);
-        
-        
         req.flash('error', 'Failed to update product');
-        
-        
-        res.redirect('/admin'); 
+        res.redirect('/owner/adminpage'); 
     }
 });
 
@@ -80,25 +75,19 @@ router.post('/updateImage/:Id', upload.single('image'), async (req, res) => {
 
         
         req.flash('success', 'Product updated successfully');
-        
-       
-        res.redirect('/admin');
+        res.redirect('/owner/adminpage');
         
     } catch (error) {
         
         console.error("Error updating product:", error);
-        
-        
         req.flash('error', 'Failed to update product');
-        
-        
-        res.redirect('/admin'); 
+        res.redirect('/owner/adminpage'); 
     }
 });
 
 
 // Route to handle GET requests for editing a product by its ID
-router.get('/edit/:Id', async (req, res) => {
+router.get('/edit/:Id', isAdminLoggedIn, async (req, res) => {
 
     let product = await productModel.findOne({ _id: req.params.Id }).populate("owner");
     

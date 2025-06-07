@@ -75,7 +75,6 @@ router.post('/upload', isAdminLoggedIn, upload.single("image"), async (req,res)=
      }
     res.redirect('/owner/profile')
     
-    
 })
 router.get("/upload", (req,res)=>{
     res.render("profilepic")
