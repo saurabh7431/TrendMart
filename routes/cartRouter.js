@@ -4,55 +4,7 @@ const userModel = require("../models/user-model");
 const productModel = require("../models/product-model");
 const isLoggedIn = require("../midileware/isLoggedIn");
 
-// Route to add item to cart
-// router.post("/addtocart/:id", isLoggedIn, async (req, res) => {
-//   try {
-//     const {email}=req.body;
-//     console.log("Email from req.user:", email);
-    
-//     let user = await userModel.findOne({email});
 
-//     if (!user) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     let isItemInCart = user.cart.some((item) =>
-//       item.product.equals(req.params.id)
-//     );
-
-//     if (isItemInCart) {
-//       return res
-//         .status(400)
-//         .json({ message: "Product is already in your cart" });
-//     }
-
-//     let product = await productModel.findById(req.params.id);
-
-//     if (!product) {
-//       return res.status(404).json({ message: "Product not found" });
-//     }
-
-//     let cartItem = user.cart.find((item) => item.product.equals(product._id));
-
-//     if (cartItem) {
-//       cartItem.quantity += 1;
-//     } else {
-//       user.cart.push({
-//         product: product._id,
-//         quantity: 1,
-//       });
-//     }
-
-//     await user.save();
-
-//     res.status(200).json({ message: "Item added to cart", cart: user.cart });
-//   } catch (error) {
-//     console.error("Error adding item to cart:", error);
-//     res
-//       .status(500)
-//       .json({ message: "Something went wrong. Please try again." });
-//   }
-// });
 
 router.post("/addtocart/:id", isLoggedIn, async (req, res) => {
   try {

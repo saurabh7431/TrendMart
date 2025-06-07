@@ -296,9 +296,6 @@ router.post('/userPayment/verify', isLoggedIn, async (req, res) => {
         console.error('Order not found for verification.');
         return res.status(404).json({ success: false, message: 'Order not found' });
       }
-
-      // console.log('Payment verified successfully:', order._id); // Log the orderId
-
       // Return orderId in the response
       return res.json({ success: true, message: 'Payment verified successfully', orderId: order._id });
     } else {
@@ -330,6 +327,25 @@ router.get("/userOrders/:orderId", isLoggedIn, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+router.get("/userOrders", isLoggedIn, async (req, res) => {
+  try {
+    const userEmail = req.user.email; // Email from logged-in user (from isLoggedIn middleware)
+
+    const user = await userModel.findOne({ email: userEmail });
+    if (!user) return res.status(404).send("User not found");
+
+    const orders = await orderModel
+      .find({ user: user._id })
+      .populate("product"); // Assuming `product` field is ref to productModel
+
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching user orders:", error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 
 // Routes for ejs-----------------------------------------------------------------------------------------------
