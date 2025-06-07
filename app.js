@@ -45,9 +45,6 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.json());
 
-// console.log("JWT Key:", process.env.JWT_KEY);
-// console.log("Session Secret:", process.env.EXPRESS_SESSION_SECRET);
-
 // Correct session configuration
 app.use(
   expressSession({
